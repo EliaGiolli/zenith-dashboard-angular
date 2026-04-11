@@ -1,1 +1,21 @@
-<p>server-card works!</p>
+<div class="p-4 border rounded-lg bg-zinc-900 border-zinc-800 hover:border-violet-500 transition-colors">
+  <div class="flex justify-between items-start mb-4">
+    <h3 class="text-zinc-100 font-bold">{{ server().name }}</h3>
+    <span class="px-2 py-1 text-xs rounded" 
+          [class.bg-green-900]="server().status === 'online'"
+          [class.bg-red-900]="server().status === 'offline'">
+      {{ statusLabel() }}
+    </span>
+  </div>
+
+  <div class="text-sm text-zinc-400 mb-6">
+    <p>CPU: {{ server().cpuUsage }}%</p>
+    <p>RAM: {{ server().memoryUsage }}%</p>
+  </div>
+
+  <button 
+    (click)="onDetailsClick()"
+    class="w-full py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-md text-sm font-medium transition-colors">
+    Vedi Dettagli
+  </button>
+</div>
