@@ -1,0 +1,58 @@
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.status-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.5rem;
+  text-transform: uppercase;
+}
+
+/* Classi per lo stato */
+.status-online { color: var(--status-online); background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2); }
+.status-offline { color: var(--status-offline); background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); }
+.status-maintenance { color: var(--status-maintenance); background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); }
+
+/* Classi per il bottone (usate dalla tua Utility) */
+.inspect-button {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 0.75rem;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.inspect-button:hover {
+  opacity: 0.9;
+}
+
+/* Varianti colore bottone basate sullo stato */
+.inspect-button.status-online { background-color: var(--status-online); }
+.inspect-button.status-offline { background-color: var(--status-offline); }
+.inspect-button.status-maintenance { background-color: var(--status-maintenance); }
+.inspect-button.status-default { background-color: var(--accent); }
+
+.meter-container { margin-bottom: 2rem; }
+.meter-label { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+.progress-bar { height: 8px; background: var(--bg-dark); border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent); transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
