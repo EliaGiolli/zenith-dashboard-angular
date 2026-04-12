@@ -10,6 +10,7 @@ import { Server } from '../../core/models/server.model';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
+  selectedServerId = signal<number | null>(null);
   // Trasformiamo l'array in un Writable Signal
   // In NestJS sarebbe come definire lo stato iniziale di un modulo
   servers = signal<Server[]>([
