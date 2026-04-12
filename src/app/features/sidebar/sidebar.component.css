@@ -1,21 +1,23 @@
 .sidebar {
   width: 260px;
+  min-height: 100vh; 
   background-color: var(--bg-card);
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
+  transition: background-color 0.3s ease;
 }
 
 .logo {
-  padding: 1.5rem;
+  padding: 2rem 1.5rem;
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 800;
   color: var(--accent);
-  border-bottom: 1px solid var(--border);
+  letter-spacing: -0.05rem;
 }
 
 .sidebar-nav {
-  padding: 1.5rem;
+  padding: 0 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -27,17 +29,27 @@
   border-radius: 0.5rem;
   color: var(--text-muted);
   font-size: 0.9rem;
+  font-weight: 500;
   transition: all 0.2s;
+}
+
+.nav-item:hover {
+  background: var(--bg-dark);
+  color: var(--text-main);
 }
 
 .nav-item.active {
   color: var(--accent);
-  font-weight: bold;
   background: rgba(124, 58, 237, 0.1);
 }
 
 .divider {
   border: 0;
   border-top: 1px solid var(--border);
-  margin: 1rem 0;
+  margin: 1.5rem 1rem;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 1.5rem;
 }

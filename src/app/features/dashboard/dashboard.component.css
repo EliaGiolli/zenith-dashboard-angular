@@ -1,46 +1,16 @@
-
-
 .dashboard-header {
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
 }
 
 .dashboard-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 800;
-  letter-spacing: -0.05rem;
-}
-
-.stats-bar {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.stat-card {
-  background: var(--bg-card);
-  padding: 1rem 1.5rem;
-  border-radius: 0.75rem;
-  border: 1px solid var(--border);
-}
-
-.stat-value {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--accent);
-  font-family: monospace;
+  color: var(--text-main);
+  margin: 0;
 }
 
 .server-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 2rem;
-}
-
-.empty-state {
-  grid-column: 1 / -1;
-  padding: 5rem;
-  text-align: center;
-  border: 2px dashed var(--border);
-  border-radius: 1.5rem;
-  color: var(--text-muted);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
 }
