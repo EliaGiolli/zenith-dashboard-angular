@@ -1,30 +1,28 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input, output } from '@angular/core';
 import { Server } from '../../../core/models/server.model';
-import { getButtonClasses } from '../../utils/server-card.utils';
+import { AppButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-server-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AppButtonComponent],
   templateUrl: './server-card.component.html',
   styleUrls: ['./server-card.component.css']
 })
 export class ServerCardComponent {
-  // Input reattivo
   server = input.required<Server>();
-
-  // Output per comunicare al padre
   select = output<number>();
 
-  // Stato derivato (quello che abbiamo discusso prima)
   statusLabel = computed(() => this.server().status.toUpperCase());
 
-  // Computed gestisce le classi dinamiche esterne
-  buttonClass = computed(() => getButtonClasses(this.server().status));
+  // Decidiamo la variante del bottone in base allo stato
+  // Se è offline, magari vogliamo un bottone 'danger' (aggiungiamolo al componente bottone)
+  buttonVariant = computed(() => {
+    return this.server().status === 'offline' ? 'danger' : 'primary';
+  });
 
   onDetailsClick() {
-    // Emettiamo l'ID del server al padre
     this.select.emit(this.server().id);
   }
 }

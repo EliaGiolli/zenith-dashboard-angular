@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { ServerCardComponent } from '../../shared/components/server-card/server-card.component';
 import { Server } from '../../core/models/server.model';
 
@@ -12,6 +12,17 @@ import { Server } from '../../core/models/server.model';
 export class DashboardComponent {
   selectedServerId = signal<number | null>(null);
   inspectionCount = signal<number>(0);
+  constructor() {
+    // Si attiva automaticamente al primo avvio e ogni volta che inspectionCount cambia
+    effect(() => {
+      const count = this.inspectionCount();
+      console.log(`Effect: Il contatore è cambiato a ${count}`);
+      
+      if (count > 10) {
+        console.warn('⚠️ Attenzione: Analisi intensiva rilevata!');
+      }
+    });
+  }
 
   servers = signal<Server[]>([
     { id: 1, name: 'Web Server 1', status: 'online', cpuUsage: 45, memoryUsage: 67, lastUpdate: new Date() },

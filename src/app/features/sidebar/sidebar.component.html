@@ -1,0 +1,14 @@
+<aside class="sidebar">
+  <div class="logo">Zenith</div>
+  
+  <nav class="sidebar-nav">
+    <a href="#" class="nav-item active">Dashboard</a>
+    <a href="#" class="nav-item">Nodes</a>
+    
+    <hr class="divider">
+
+    <button app-btn variant="ghost" (click)="onToggle()">
+      {{ darkMode() ? '☀️ Light Mode' : '🌙 Dark Mode' }}
+    </button>
+  </nav>
+</aside>
