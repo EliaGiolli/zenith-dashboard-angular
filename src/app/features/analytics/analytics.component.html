@@ -1,0 +1,27 @@
+<div class="analytics-container">
+  <header class="dashboard-header">
+    <h1 class="dashboard-title">Network Analytics</h1>
+    <p style="color: var(--text-muted)">Monitoraggio dei flussi dati via HttpClient</p>
+  </header>
+
+  <section class="api-log-panel">
+    <div>> GET /api/servers ...</div>
+    @if (isLoading()) {
+      <div style="color: var(--accent)">[WAIT] Simulazione latenza di rete (1.5s)...</div>
+    } @else {
+      <div style="color: #10b981">[READY] Caricati {{ servers().length }} nodi.</div>
+    }
+  </section>
+
+  <div class="server-grid">
+    @if (isLoading()) {
+      @for (i of [1,2,3]; track i) {
+        <div class="loading-shimmer"></div>
+      }
+    } @else {
+      @for (server of servers(); track server.id) {
+        <app-server-card [server]="server" />
+      }
+    }
+  </div>
+</div>
