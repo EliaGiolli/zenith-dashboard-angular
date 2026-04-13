@@ -2,7 +2,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Server } from '../models/server.model';
-import { catchError, map, of, startWith } from 'rxjs';
+import { catchError, map, of, startWith, switchMap, timer } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ServerService {
@@ -14,11 +14,16 @@ export class ServerService {
     return this.http.get<Server[]>(this.API_URL);
   }
 
-  getServersState() {
-    return this.http.get<Server[]>(this.API_URL).pipe(
-      map(data => ({ loading: false, data, error: null })),
-      startWith({ loading: true, data: [], error: null }),
-      catchError(err => of({ loading: false, data: [], error: err }))
+  getPollingServersState() {
+    // timer(ritardo_iniziale, intervallo)
+    return timer(0, 5000).pipe( 
+      // Ogni 5 secondi, "passiamo" alla chiamata HTTP
+      switchMap(() => this.http.get<Server[]>(this.API_URL).pipe(
+        map(data => ({ loading: false, data, error: null })),
+        catchError(err => of({ loading: false, data: [], error: err }))
+      )),
+      // Lo stato iniziale di caricamento lo diamo solo la primissima volta
+      startWith({ loading: true, data: [], error: null })
     );
   }
 }

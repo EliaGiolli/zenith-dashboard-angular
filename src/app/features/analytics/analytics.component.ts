@@ -18,7 +18,7 @@ export class AnalyticsComponent {
    * Trasformiamo l'Observable del service in un Signal.
    * Il Bridge gestisce automaticamente sottoscrizione e cleanup.
    */
-  state = toSignal(this.serverService.getServersState(), {
+  state = toSignal(this.serverService.getPollingServersState(), {
     initialValue: { loading: true, data: [], error: null as any }
   });
 
