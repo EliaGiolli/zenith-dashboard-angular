@@ -1,0 +1,32 @@
+<app-form-card>
+  <h2 form-title>Configurazione Nuovo Nodo</h2>
+
+  <form [formGroup]="serverForm" form-body class="vertical-form">
+    <div class="field">
+      <label>Nome Identificativo</label>
+      <input type="text" formControlName="name" placeholder="es. SRV-WEB-01">
+      @if (serverForm.get('name')?.invalid && serverForm.get('name')?.touched) {
+        <small class="error">Il nome deve avere almeno 3 caratteri.</small>
+      }
+    </div>
+
+    <div class="field">
+      <label>Indirizzo IP</label>
+      <input type="text" formControlName="ip" placeholder="192.168.1.1">
+    </div>
+  </form>
+
+  <div form-actions>
+    <button class="btn" data-variant="ghost" routerLink="/analytics">
+      Annulla
+    </button>
+    
+    <button 
+      class="btn" 
+      data-variant="primary" 
+      [disabled]="serverForm.invalid || isPending()"
+      (click)="onSubmit()">
+      {{ isPending() ? 'Creazione in corso...' : 'Conferma e Salva' }}
+    </button>
+  </div>
+</app-form-card>

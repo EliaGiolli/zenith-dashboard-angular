@@ -2,11 +2,12 @@ import { Component, inject, computed } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ServerService } from '../../core/services/server.service';
 import { ServerCardComponent } from '../../shared/components/server-card/server-card.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-analytics',
   standalone: true,
-  imports: [ServerCardComponent],
+  imports: [ServerCardComponent, RouterLink],
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.css'
 })
