@@ -1,0 +1,61 @@
+.search-box {
+  position: relative;
+  width: 100%;
+  max-width: 450px; /* Non vogliamo che occupi tutto lo schermo su desktop */
+  margin-bottom: 2rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  padding-right: 3rem; /* Spazio per il tasto X */
+  
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+  
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+/* Effetto focus coordinato con l'accento dell'app */
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  background-color: var(--bg-app);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* Il tasto per pulire l'input */
+.clear-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  
+  background: var(--bg-dark);
+  color: var(--text-muted);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+
+.clear-btn:hover {
+  background-color: var(--accent);
+  color: white;
+}

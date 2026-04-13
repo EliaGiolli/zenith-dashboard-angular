@@ -1,17 +1,19 @@
 import { Component, computed, effect, signal } from '@angular/core';
 import { ServerCardComponent } from '../../shared/components/server-card/server-card.component';
+import { SearchInputComponent } from '../../shared/components/search-input/search-input.component';
 import { Server } from '../../core/models/server.model';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true, 
-  imports: [ServerCardComponent],
+  imports: [ServerCardComponent, SearchInputComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
   selectedServerId = signal<number | null>(null);
   inspectionCount = signal<number>(0);
+  searchQuery = signal('');
   constructor() {
     // Si attiva automaticamente al primo avvio e ogni volta che inspectionCount cambia
     effect(() => {
@@ -36,6 +38,16 @@ export class DashboardComponent {
     if (count === 0) return 'Nessuna attività';
     if (count <= 5) return 'Monitoraggio attivo';
     return 'Analisi intensiva';
+  });
+
+  // Computed filtra i server in tempo reale
+  filteredServers = computed(() => {
+    const term = this.searchQuery().toLowerCase().trim();
+    if (!term) return this.servers();
+
+    return this.servers().filter(s => 
+      s.name.toLowerCase().includes(term)
+    );
   });
 
   handleServerSelection(id: number) {

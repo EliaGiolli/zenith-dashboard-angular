@@ -10,6 +10,9 @@
   </div>
 </div>
 
+<div class="dashboard-controls">
+  <app-search-input [(value)]="searchQuery" />
+</div>
 
 <div class="server-grid">
   @for (server of servers(); track server.id) {
