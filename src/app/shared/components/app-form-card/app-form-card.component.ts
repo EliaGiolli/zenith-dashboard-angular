@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding, input } from '@angular/core';
 
 @Component({
   selector: 'app-form-card',
@@ -8,5 +8,10 @@ import { Component } from '@angular/core';
   styleUrl: './app-form-card.component.css'
 })
 export class AppFormCardComponent {
+  variant = input<'default' | 'contact'>('default');
 
+  @HostBinding('attr.data-variant')
+  get v() {
+    return this.variant();
+  }
 }

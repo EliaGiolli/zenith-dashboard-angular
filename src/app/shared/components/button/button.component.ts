@@ -1,13 +1,9 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, input, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'button[app-btn]',
   standalone: true,
-  // Usiamo ng-content per proiettare il testo/icone dentro il bottone
   template: `<ng-content></ng-content>`,
-  host: {
-    '[class]': 'computedClasses()',
-  },
   styles: `
     :host {
       display: inline-flex;
@@ -17,27 +13,46 @@ import { Component, input, computed } from '@angular/core';
       border-radius: 0.5rem;
       font-weight: 600;
       cursor: pointer;
-      border: 1px solid transparent;
+      border: 1px solid var(--border);
       transition: all 0.2s ease;
       font-family: inherit;
+      background: var(--bg-card);
+      color: var(--text-main);
     }
-    :host(.btn-primary) { 
-      background: var(--accent); 
-      color: white; 
+
+    :host([data-variant="primary"]) {
+      background: var(--accent);
+      color: white;
+      border: none;
     }
-    :host(.btn-ghost) { 
-      background: transparent; 
-      border: 1px solid var(--border); 
-      color: var(--text-main); 
+
+    :host([data-variant="ghost"]) {
+      background: transparent;
     }
-    :host(.btn-ghost:hover) { 
-      background: var(--border); 
+
+    :host([data-variant="danger"]) {
+      background: var(--status-offline);
+      color: white;
+      border: none;
     }
-    :host(.btn-danger) { background: var(--status-offline); color: white; }
-    :host(.btn-danger:hover) { opacity: 0.9; }
+
+    :host([data-state="loading"]) {
+      opacity: 0.6;
+      pointer-events: none;
+    }
   `
 })
 export class AppButtonComponent {
   variant = input<'primary' | 'ghost' | 'danger'>('primary');
-  computedClasses = computed(() => `btn-${this.variant()}`);
+  isPending = input(false);
+
+  @HostBinding('attr.data-variant')
+  get v() {
+    return this.variant();
+  }
+
+  @HostBinding('attr.data-state')
+  get s() {
+    return this.isPending() ? 'loading' : null;
+  }
 }

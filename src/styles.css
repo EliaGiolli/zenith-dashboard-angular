@@ -1,41 +1,78 @@
 :root {
-  /* Light Theme */
+  /* =========================
+     LIGHT THEME TOKENS
+  ========================= */
+
   --bg-app: #f8fafc;
-  --bg-card: #ffffff;
-  --bg-dark: #e2e8f0; /* Sfondo barre/input */
+
+  /* 🧠 NEW: surface system (fondamentale per UI coerente) */
+  --surface: #ffffff;
+  --surface-2: #f1f5f9;
+
+  --bg-card: #ffffff; /* legacy compat */
+  --bg-dark: #e2e8f0;
+
   --text-main: #1e293b;
   --text-muted: #64748b;
+
   --border: #e2e8f0;
+
   --accent: #7c3aed;
   --accent-hover: #6d28d9;
+
   --status-online: #10b981;
   --status-offline: #ef4444;
   --status-maintenance: #f59e0b;
 }
 
+/* =========================
+   DARK THEME TOKENS
+========================= */
+
 .dark-theme {
-  /* Dark Theme */
+
   --bg-app: #09090b;
+
+  /* 🧠 surface system dark */
+  --surface: #18181b;
+  --surface-2: #27272a;
+
   --bg-card: #18181b;
   --bg-dark: #27272a;
+
   --text-main: #f4f4f5;
   --text-muted: #a1a1aa;
+
   --border: #27272a;
+
   --accent: #a78bfa;
   --accent-hover: #c4b5fd;
+
+  --status-online: #10b981;
+  --status-offline: #ef4444;
+  --status-maintenance: #f59e0b;
 }
+
+/* =========================
+   BASE LAYOUT
+========================= */
 
 body {
   margin: 0;
   background-color: var(--bg-app);
   color: var(--text-main);
   font-family: 'Inter', system-ui, sans-serif;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-/* Classe base della pillola */
+/* =========================
+   STATUS SYSTEM (SERVER)
+========================= */
+
 .status-pill {
   padding: 0.25rem 0.75rem;
   border-radius: 999px;
@@ -47,7 +84,6 @@ body {
   gap: 0.5rem;
 }
 
-/* Varianti basate sull'attributo data-status */
 .status-pill[data-status="online"] {
   background-color: #dcfce7;
   color: #166534;
@@ -66,7 +102,6 @@ body {
   border: 1px solid #fef08a;
 }
 
-/* Effetto "pulsante" solo per chi è online */
 .status-pill[data-status="online"]::before {
   content: "";
   width: 8px;
@@ -74,4 +109,84 @@ body {
   background-color: #22c55e;
   border-radius: 50%;
   display: inline-block;
+}
+
+/* =========================
+   GLOBAL FORM SYSTEM
+========================= */
+
+.standard-form {
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+/* 🔥 INPUT SYSTEM FIXED (surface-based) */
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 8px;
+
+  background: var(--surface-2);
+  color: var(--text-main);
+
+  border: 1px solid var(--border);
+
+  font: inherit;
+
+  transition: all 0.2s ease;
+}
+
+/* hover state (UX upgrade) */
+.form-field input:hover,
+.form-field textarea:hover {
+  border-color: var(--accent-hover);
+}
+
+/* focus state (modern UX) */
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+/* labels (missing in original system) */
+.form-field label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* error text (semantic + contrast-aware) */
+.error-text {
+  color: var(--status-offline);
+  font-size: 0.75rem;
+}
+
+/* =========================
+   OPTIONAL UX IMPROVEMENTS
+========================= */
+
+/* smooth theme transitions */
+button,
+input,
+textarea,
+.card,
+.status-pill {
+  transition: all 0.2s ease;
+}
+input,
+textarea,
+select {
+  all: unset;
+  box-sizing: border-box;
 }

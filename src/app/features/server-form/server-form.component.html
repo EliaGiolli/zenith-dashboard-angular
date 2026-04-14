@@ -1,63 +1,127 @@
-<dialog appNativeModal (closed)="onClose()" class="zenith-modal">
+<dialog
+  appNativeModal
+  class="zenith-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="server-form-title">
+
   <app-form-card>
-    
-    <h2 form-title>
-      @if (success()) { ✨ Server Aggiunto! } 
-      @else { {{ previewLabel() }} }
+
+    <h2 id="server-form-title" form-title>
+      @if (success()) {
+        ✨ Server Aggiunto!
+      } @else {
+        {{ previewLabel() }}
+      }
     </h2>
 
     <div form-body>
+
       @if (success()) {
-        <div class="success-message">
+
+        <div class="success-message"
+             role="status"
+             aria-live="polite">
           <p>Il server è stato registrato con successo nel cluster.</p>
-          <div class="loading-bar"></div> </div>
+          <div class="loading-bar"></div>
+        </div>
+
       } @else {
-        <form [formGroup]="form" class="standard-form">
-          
+
+        <form
+          [formGroup]="form"
+          class="standard-form"
+          aria-labelledby="server-form-title"
+          novalidate>
+
+          <!-- NAME -->
           <div class="form-field">
             <label for="name">Nome Nodo</label>
-            <input id="name" type="text" formControlName="name" placeholder="es. Web-Server-01">
+
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+              placeholder="es. Web-Server-01"
+              aria-describedby="name-error"
+              [attr.aria-invalid]="form.get('name')?.invalid && form.get('name')?.touched"
+            >
+
             @if (form.get('name')?.invalid && form.get('name')?.touched) {
-              <small class="error-text">Minimo 3 caratteri richiesti</small>
+              <small id="name-error" class="error-text" role="alert">
+                Minimo 3 caratteri richiesti
+              </small>
             }
           </div>
 
+          <!-- IP -->
           <div class="form-field">
             <label for="ip">Indirizzo IP</label>
-            <input id="ip" type="text" formControlName="ip" placeholder="192.168.1.1">
+
+            <input
+              id="ip"
+              type="text"
+              formControlName="ip"
+              placeholder="192.168.1.1"
+              aria-describedby="ip-error"
+              [attr.aria-invalid]="form.get('ip')?.invalid && form.get('ip')?.touched"
+            >
+
             @if (form.get('ip')?.invalid && form.get('ip')?.touched) {
-              <small class="error-text">Inserisci un indirizzo IP valido</small>
+              <small id="ip-error" class="error-text" role="alert">
+                Inserisci un indirizzo IP valido
+              </small>
             }
           </div>
 
         </form>
-        
-        @if (error()) { 
-          <div class="error-banner">
-            <p>{{ error() }}</p> 
+
+        @if (error()) {
+          <div class="error-banner"
+               role="alert"
+               aria-live="assertive">
+            <p>{{ error() }}</p>
           </div>
         }
+
       }
+
     </div>
 
     <div form-actions>
+
       @if (!success()) {
-        <button class="btn" data-variant="ghost" (click)="onClose()" [disabled]="isPending()">
+
+        <button
+          app-btn
+          variant="ghost"
+          type="button"
+          (click)="onClose()"
+          [isPending]="isPending()">
           Annulla
         </button>
-        
-        <button class="btn" data-variant="primary" 
-                [disabled]="form.invalid || isPending()" 
-                (click)="onSubmit()">
-          @if (isPending()) { 
-            <span class="spinner"></span> 
+
+        <button
+          app-btn
+          variant="primary"
+          type="submit"
+          [isPending]="isPending()"
+          [disabled]="form.invalid || isPending()"
+          (click)="onSubmit()">
+
+          @if (isPending()) {
+            <span class="spinner"></span>
             <span>Salvataggio...</span>
-          } @else { 
-            <span>Salva Nodo</span> 
+          } @else {
+            <span>Salva Nodo</span>
           }
+
         </button>
+
       }
+
     </div>
 
   </app-form-card>
+
 </dialog>

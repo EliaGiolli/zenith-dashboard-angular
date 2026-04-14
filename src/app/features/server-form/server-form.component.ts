@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ServerSchema } from '../../core/schemas/server.schema';
 import { ServerService } from '../../core/services/server.service';
 import { AppFormCardComponent } from '../../shared/components/app-form-card/app-form-card.component';
+import { AppButtonComponent } from '../../shared/components/button/button.component';
 import { NativeModalDirective } from '../../core/directives/modal-a11y.directive';
 
 @Component({
@@ -13,6 +14,7 @@ import { NativeModalDirective } from '../../core/directives/modal-a11y.directive
   imports: [
     ReactiveFormsModule, 
     AppFormCardComponent, 
+    AppButtonComponent,
     NativeModalDirective
   ], 
   templateUrl: './server-form.component.html'

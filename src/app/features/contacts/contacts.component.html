@@ -1,1 +1,123 @@
-<p>contacts works!</p>
+<app-form-card variant="contact">
+
+  <h2 id="contact-title" form-title>
+    @if (success()) {
+      ✨ Messaggio inviato!
+    } @else {
+      Contattaci
+    }
+  </h2>
+
+  <div form-body>
+
+    @if (success()) {
+
+      <p class="success-message"
+         role="status"
+         aria-live="polite">
+        Ti risponderemo il prima possibile 🚀
+      </p>
+
+    } @else {
+
+      <form
+        [formGroup]="form"
+        class="standard-form"
+        aria-labelledby="contact-title"
+        novalidate>
+
+        <!-- NAME -->
+        <div class="form-field">
+          <label for="name">Nome</label>
+
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            aria-describedby="name-error"
+            [attr.aria-invalid]="form.get('name')?.invalid && form.get('name')?.touched"
+          >
+
+          @if (form.get('name')?.invalid && form.get('name')?.touched) {
+            <small id="name-error" class="error-text" role="alert">
+              Nome non valido
+            </small>
+          }
+        </div>
+
+        <!-- EMAIL -->
+        <div class="form-field">
+          <label for="email">Email</label>
+
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            aria-describedby="email-error"
+            [attr.aria-invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+          >
+
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <small id="email-error" class="error-text" role="alert">
+              Email non valida
+            </small>
+          }
+        </div>
+
+        <!-- MESSAGE -->
+        <div class="form-field">
+          <label for="message">Messaggio</label>
+
+          <textarea
+            id="message"
+            formControlName="message"
+            aria-describedby="message-error"
+            [attr.aria-invalid]="form.get('message')?.invalid && form.get('message')?.touched"
+          ></textarea>
+
+          @if (form.get('message')?.invalid && form.get('message')?.touched) {
+            <small id="message-error" class="error-text" role="alert">
+              Minimo 10 caratteri
+            </small>
+          }
+        </div>
+
+      </form>
+
+    }
+
+  </div>
+
+  <div form-actions>
+
+    @if (!success()) {
+
+      <button
+        app-btn
+        variant="ghost"
+        type="button"
+        (click)="form.reset()">
+        Reset
+      </button>
+
+      <button
+        app-btn
+        variant="primary"
+        type="submit"
+        [isPending]="isSending()"
+        [disabled]="form.invalid || isSending()"
+        (click)="onSubmit()">
+
+        @if (isSending()) {
+          Inviando...
+        } @else {
+          Invia messaggio
+        }
+
+      </button>
+
+    }
+
+  </div>
+
+</app-form-card>
