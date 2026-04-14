@@ -5,26 +5,28 @@
 }
 
 .dashboard-header {
+  margin-bottom: 2.5rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-color);
+  flex-direction: column; /* Bottone sotto il titolo */
+  gap: 1.5rem;
 }
 
-.header-info h1 {
-  font-size: 1.8rem;
-  margin: 0;
+.dashboard-title {
+  font-size: 2.2rem;
+  font-weight: 800;
   color: var(--text-main);
+  margin: 0;
 }
 
-.header-info p {
-  margin: 0.2rem 0 0;
+.dashboard-subtitle {
   color: var(--text-muted);
+  margin-top: 0.5rem;
 }
 
-
+.action-bar {
+  display: flex;
+  justify-content: flex-start; 
+}
 
 .network-status {
   display: grid;

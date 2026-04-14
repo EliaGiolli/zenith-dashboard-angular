@@ -7,8 +7,16 @@ import { ServerFormComponent } from "./features/server-form/server-form.componen
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'analytics', component: AnalyticsComponent },
-  { path: 'nodes/new', component: ServerFormComponent }, 
+  {
+    path: 'analytics',
+    component: AnalyticsComponent,
+    children: [
+      {
+        path: 'nodes/new',
+        component: ServerFormComponent
+      }
+    ]
+  }, 
   { path: 'contacts', component: ContactsComponent },
   { path: '**', redirectTo: 'dashboard' } // Wildcard per gestire i 404
 ];

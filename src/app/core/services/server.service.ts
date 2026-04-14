@@ -2,7 +2,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Server } from '../models/server.model';
-import { catchError, delay, map, Observable, of, startWith, switchMap, timer } from 'rxjs';
+import { catchError, delay, map, Observable, of, shareReplay, startWith, switchMap, tap, timer } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ServerService {
@@ -15,26 +15,19 @@ export class ServerService {
   }
 
   getPollingServersState() {
-    // timer(ritardo_iniziale, intervallo)
-    return timer(0, 5000).pipe( 
-      // Ogni 5 secondi, "passiamo" alla chiamata HTTP
-      switchMap(() => this.http.get<Server[]>(this.API_URL).pipe(
-        map(data => ({ loading: false, data, error: null })),
-        catchError(err => of({ loading: false, data: [], error: err }))
-      )),
-      // Lo stato iniziale di caricamento lo diamo solo la primissima volta
-      startWith({ loading: true, data: [], error: null })
+    // Cambiamo l'intervallo a 15000ms (15 secondi)
+    return timer(0, 15000).pipe(
+      switchMap(() => this.http.get<Server[]>('api/servers')),
+      map(data => ({ loading: false, data, error: null })),
+      catchError(error => of({ loading: false, data: [], error })),
+      // ShareReplay evita che ogni componente che si sottoscrive faccia partire un nuovo polling
+      shareReplay(1) 
     );
-
   }
-    addServer(newServer: Partial<Server>): Observable<Server> {
-    return this.http.post<Server>(this.API_URL, newServer).pipe(
-      // Aggiungiamo un delay minimo per simulare la latenza e testare i nostri Signals (isPending)
-      delay(800),
-      catchError(err => {
-        console.error('Errore nel servizio durante la creazione:', err);
-        throw err;
-      })
+  // src/app/core/services/server.service.ts
+  addServer(server: any): Observable<any> {
+    return this.http.post<any>('api/servers', server).pipe(
+      tap(() => console.log('Server inviato con successo al mock'))
     );
   }
 }

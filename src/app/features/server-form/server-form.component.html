@@ -1,35 +1,63 @@
-<app-form-card>
-  <h2 form-title>{{ previewLabel() }}</h2>
-
-  <form [formGroup]="form" form-body class="standard-form">
-    <div class="form-field">
-      <label for="name">Nome Nodo</label>
-      <input id="name" type="text" formControlName="name" 
-             [class.invalid]="form.get('name')?.invalid && form.get('name')?.touched">
-      
-      @if (form.get('name')?.hasError('minlength')) {
-        <small class="error-text">Troppo corto! Serve almeno 3 caratteri.</small>
-      }
-    </div>
-
-    <div class="form-field">
-      <label for="ip">Indirizzo IP</label>
-      <input id="ip" type="text" formControlName="ip" placeholder="192.168.x.x">
-    </div>
-  </form>
-
-  <div form-actions>
-    <button class="btn" data-variant="ghost" (click)="form.reset()">Reset</button>
+<dialog appNativeModal (closed)="onClose()" class="zenith-modal">
+  <app-form-card>
     
-    <button class="btn" 
-            data-variant="primary" 
-            [disabled]="form.invalid || isPending()" 
-            (click)="onSubmit()">
-      @if (isPending()) {
-        <span class="spinner"></span> Caricamento...
+    <h2 form-title>
+      @if (success()) { ✨ Server Aggiunto! } 
+      @else { {{ previewLabel() }} }
+    </h2>
+
+    <div form-body>
+      @if (success()) {
+        <div class="success-message">
+          <p>Il server è stato registrato con successo nel cluster.</p>
+          <div class="loading-bar"></div> </div>
       } @else {
-        Salva Server
+        <form [formGroup]="form" class="standard-form">
+          
+          <div class="form-field">
+            <label for="name">Nome Nodo</label>
+            <input id="name" type="text" formControlName="name" placeholder="es. Web-Server-01">
+            @if (form.get('name')?.invalid && form.get('name')?.touched) {
+              <small class="error-text">Minimo 3 caratteri richiesti</small>
+            }
+          </div>
+
+          <div class="form-field">
+            <label for="ip">Indirizzo IP</label>
+            <input id="ip" type="text" formControlName="ip" placeholder="192.168.1.1">
+            @if (form.get('ip')?.invalid && form.get('ip')?.touched) {
+              <small class="error-text">Inserisci un indirizzo IP valido</small>
+            }
+          </div>
+
+        </form>
+        
+        @if (error()) { 
+          <div class="error-banner">
+            <p>{{ error() }}</p> 
+          </div>
+        }
       }
-    </button>
-  </div>
-</app-form-card>
+    </div>
+
+    <div form-actions>
+      @if (!success()) {
+        <button class="btn" data-variant="ghost" (click)="onClose()" [disabled]="isPending()">
+          Annulla
+        </button>
+        
+        <button class="btn" data-variant="primary" 
+                [disabled]="form.invalid || isPending()" 
+                (click)="onSubmit()">
+          @if (isPending()) { 
+            <span class="spinner"></span> 
+            <span>Salvataggio...</span>
+          } @else { 
+            <span>Salva Nodo</span> 
+          }
+        </button>
+      }
+    </div>
+
+  </app-form-card>
+</dialog>

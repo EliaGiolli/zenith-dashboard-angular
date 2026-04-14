@@ -1,11 +1,15 @@
 <div class="analytics-container">
   <header class="dashboard-header">
-    <h1 class="dashboard-title">Network Analytics</h1>
-    <p style="color: var(--text-muted)">Monitoraggio dei flussi dati via HttpClient</p>
-
-    <button class="btn" data-variant="primary" routerLink="/nodes/new">
-      + Nuovo Nodo
-    </button>
+    <div class="title-group">
+      <h1 class="dashboard-title">Network Analytics</h1>
+      <p class="dashboard-subtitle">Monitoraggio dei flussi dati via HttpClient</p>
+    </div>
+    
+    <div class="action-bar">
+      <button class="btn" data-variant="primary" routerLink="nodes/new">
+        + Nuovo Nodo
+      </button>
+    </div>
   </header>
 
   <section class="api-log-panel">
@@ -28,4 +32,5 @@
       }
     }
   </div>
+  <router-outlet />
 </div>

@@ -5,11 +5,16 @@ import { Router } from '@angular/router';
 import { ServerSchema } from '../../core/schemas/server.schema';
 import { ServerService } from '../../core/services/server.service';
 import { AppFormCardComponent } from '../../shared/components/app-form-card/app-form-card.component';
+import { NativeModalDirective } from '../../core/directives/modal-a11y.directive';
 
 @Component({
   selector: 'app-server-form',
   standalone: true,
-  imports: [ReactiveFormsModule, AppFormCardComponent], 
+  imports: [
+    ReactiveFormsModule, 
+    AppFormCardComponent, 
+    NativeModalDirective
+  ], 
   templateUrl: './server-form.component.html'
 })
 export class ServerFormComponent {
@@ -20,6 +25,7 @@ export class ServerFormComponent {
   // Stato della "Server Action"
   isPending = signal(false);
   success = signal(false);
+  error = signal<string | null>(null);
 
   // Definizione del Form
   form = this.fb.group({
@@ -38,34 +44,32 @@ export class ServerFormComponent {
   });
 
   async onSubmit() {
-    if (this.form.invalid) return;
+  if (this.form.invalid) return;
 
-    this.isPending.set(true);
-    
-    // Validazione extra con Zod
-    const validation = ServerSchema.safeParse(this.form.value);
-    
-    if (!validation.success) {
-      console.error("Zod Validation Failed:", validation.error.format());
+  this.isPending.set(true); 
+  
+  const validation = ServerSchema.safeParse(this.form.value);
+  if (!validation.success) {
+    this.isPending.set(false);
+    return;
+  }
+
+  this.serverService.addServer(validation.data).subscribe({
+    next: () => {
+      this.success.set(true); // Mostra il messaggio "✨ Nodo Creato!" nel template
       this.isPending.set(false);
-      return;
+      
+      // Chiudiamo dopo un breve delay per dare soddisfazione all'utente
+      setTimeout(() => this.onClose(), 1500);
+    },
+    error: (err) => {
+      this.isPending.set(false);
+      // Qui potresti impostare un signal error('Ops, riprova!')
     }
-
-    // Nel metodo onSubmit(), dentro il next della sottoscrizione
-    this.serverService.addServer(validation.data).subscribe({
-      next: () => {
-        this.success.set(true);
-        this.isPending.set(false);
-        
-        // Piccolo delay per far vedere il feedback di successo all'utente
-        setTimeout(() => {
-          this.router.navigate(['/analytics']);
-        }, 1500);
-      },
-      error: () => {
-        this.isPending.set(false);
-        // Gestione errore (magari un altro signal 'error')
-      }
-    });
+  });
+}
+  onClose() {
+    // Se usi le rotte, torna alla dashboard
+    this.router.navigate(['/analytics']);
   }
 }

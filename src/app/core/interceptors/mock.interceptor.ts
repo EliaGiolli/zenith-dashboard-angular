@@ -2,59 +2,63 @@ import { HttpErrorResponse, HttpInterceptorFn, HttpResponse } from '@angular/com
 import { catchError, delay, of, throwError } from 'rxjs';
 import { Server } from '../models/server.model';
 
-/**
- * Funzione di utilità per il mapping degli errori
- */
+// 1. PERSISTENZA: Spostiamo i dati FUORI dalla funzione. 
+// Questa variabile vivrà finché non ricarichi la pagina (F5).
+let MOCK_SERVERS: Server[] = [
+  { id: 1, name: 'Web Server 1', status: 'online', cpuUsage: 45, memoryUsage: 62, lastUpdate: new Date() },
+  { id: 2, name: 'Database Server', status: 'maintenance', cpuUsage: 23, memoryUsage: 88, lastUpdate: new Date() },
+  { id: 3, name: 'API Gateway', status: 'offline', cpuUsage: 0, memoryUsage: 0, lastUpdate: new Date() }
+];
+
 const handleHttpError = (error: HttpErrorResponse) => {
-  let message = '';
-  switch (error.status) {
-    case 404:
-      message = 'Risorsa non trovata: controlla l\'URL dell\'API';
-      break;
-    case 500:
-      message = 'Errore del server: il finto backend è esploso';
-      break;
-    case 0:
-      message = 'Errore di rete: il server è irraggiungibile';
-      break;
-    default:
-      message = `Errore inaspettato: ${error.message}`;
-  }
+  const messages: Record<number, string> = {
+    404: 'Risorsa non trovata: controlla l\'URL',
+    500: 'Errore del server: il finto backend è esploso',
+    0: 'Errore di rete: server irraggiungibile'
+  };
+  const message = messages[error.status] || `Errore inaspettato: ${error.message}`;
   console.error('%c [API ERROR]', 'color: #ff4b4b; font-weight: bold;', message);
-  return throwError(() => new Error(message)); 
+  return throwError(() => new Error(message));
 };
 
 export const mockInterceptor: HttpInterceptorFn = (req, next) => {
   
-  // 1. LOGICA MOCK
   if (req.url.includes('api/servers')) {
-    const mockData: Server[] = [
-      { id: 1, name: 'Web Server 1', status: 'online', cpuUsage: 45, memoryUsage: 62, lastUpdate: new Date() },
-      { id: 2, name: 'Database Server', status: 'maintenance', cpuUsage: 23, memoryUsage: 88, lastUpdate: new Date() },
-      { id: 3, name: 'API Gateway', status: 'offline', cpuUsage: 0, memoryUsage: 0, lastUpdate: new Date() }
-    ];
-
-    const dynamicData = mockData.map(s => ({
-      ...s,
-      cpuUsage: s.status === 'offline' ? 0 : Math.floor(Math.random() * 100),
-      lastUpdate: new Date()
-    }));
-
-    // Simuliamo un errore casuale per testare l'interceptor
-    if (Math.random() < 0.1) {
-      return throwError(() => new HttpErrorResponse({ status: 500 })).pipe(
-        delay(1000),
-        catchError(handleHttpError) // Gestiamo l'errore anche qui!
-      );
+    
+    // --- GESTIONE POST (Creazione) ---
+    if (req.method === 'POST') {
+      const body = req.body as any;
+      const newServer:Server = { 
+        ...body, 
+        id: MOCK_SERVERS.length + 1,
+        cpuUsage: 0, 
+        memoryUsage: 0, 
+        lastUpdate: new Date() 
+      };
+      MOCK_SERVERS = [...MOCK_SERVERS, newServer]; // Aggiorniamo il "DB"
+      
+      return of(new HttpResponse({ status: 201, body: newServer })).pipe(delay(1000));
     }
 
-    return of(new HttpResponse({ status: 200, body: dynamicData })).pipe(
-      delay(1500)
-    );
+    // --- GESTIONE GET (Lettura con dati dinamici) ---
+    if (req.method === 'GET') {
+      const dynamicData = MOCK_SERVERS.map(s => ({
+        ...s,
+        cpuUsage: s.status === 'offline' ? 0 : Math.floor(Math.random() * 100),
+        lastUpdate: new Date()
+      }));
+
+      // Errore casuale ridotto al 5% per non essere fastidioso
+      if (Math.random() < 0.05) {
+        return throwError(() => new HttpErrorResponse({ status: 500 })).pipe(
+          delay(500),
+          catchError(handleHttpError)
+        );
+      }
+
+      return of(new HttpResponse({ status: 200, body: dynamicData })).pipe(delay(800));
+    }
   }
 
-  // 2. LOGICA RICHIESTE REALI
-  return next(req).pipe(
-    catchError(handleHttpError)
-  );
+  return next(req).pipe(catchError(handleHttpError));
 };
