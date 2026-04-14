@@ -2,7 +2,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Server } from '../models/server.model';
-import { catchError, map, of, startWith, switchMap, timer } from 'rxjs';
+import { catchError, delay, map, Observable, of, startWith, switchMap, timer } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ServerService {
@@ -24,6 +24,17 @@ export class ServerService {
       )),
       // Lo stato iniziale di caricamento lo diamo solo la primissima volta
       startWith({ loading: true, data: [], error: null })
+    );
+
+  }
+    addServer(newServer: Partial<Server>): Observable<Server> {
+    return this.http.post<Server>(this.API_URL, newServer).pipe(
+      // Aggiungiamo un delay minimo per simulare la latenza e testare i nostri Signals (isPending)
+      delay(800),
+      catchError(err => {
+        console.error('Errore nel servizio durante la creazione:', err);
+        throw err;
+      })
     );
   }
 }

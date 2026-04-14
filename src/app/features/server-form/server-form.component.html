@@ -1,32 +1,35 @@
 <app-form-card>
-  <h2 form-title>Configurazione Nuovo Nodo</h2>
+  <h2 form-title>{{ previewLabel() }}</h2>
 
-  <form [formGroup]="serverForm" form-body class="vertical-form">
-    <div class="field">
-      <label>Nome Identificativo</label>
-      <input type="text" formControlName="name" placeholder="es. SRV-WEB-01">
-      @if (serverForm.get('name')?.invalid && serverForm.get('name')?.touched) {
-        <small class="error">Il nome deve avere almeno 3 caratteri.</small>
+  <form [formGroup]="form" form-body class="standard-form">
+    <div class="form-field">
+      <label for="name">Nome Nodo</label>
+      <input id="name" type="text" formControlName="name" 
+             [class.invalid]="form.get('name')?.invalid && form.get('name')?.touched">
+      
+      @if (form.get('name')?.hasError('minlength')) {
+        <small class="error-text">Troppo corto! Serve almeno 3 caratteri.</small>
       }
     </div>
 
-    <div class="field">
-      <label>Indirizzo IP</label>
-      <input type="text" formControlName="ip" placeholder="192.168.1.1">
+    <div class="form-field">
+      <label for="ip">Indirizzo IP</label>
+      <input id="ip" type="text" formControlName="ip" placeholder="192.168.x.x">
     </div>
   </form>
 
   <div form-actions>
-    <button class="btn" data-variant="ghost" routerLink="/analytics">
-      Annulla
-    </button>
+    <button class="btn" data-variant="ghost" (click)="form.reset()">Reset</button>
     
-    <button 
-      class="btn" 
-      data-variant="primary" 
-      [disabled]="serverForm.invalid || isPending()"
-      (click)="onSubmit()">
-      {{ isPending() ? 'Creazione in corso...' : 'Conferma e Salva' }}
+    <button class="btn" 
+            data-variant="primary" 
+            [disabled]="form.invalid || isPending()" 
+            (click)="onSubmit()">
+      @if (isPending()) {
+        <span class="spinner"></span> Caricamento...
+      } @else {
+        Salva Server
+      }
     </button>
   </div>
 </app-form-card>

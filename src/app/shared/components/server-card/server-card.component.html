@@ -5,10 +5,7 @@
       <code style="color: var(--text-muted); font-size: 0.7rem;">ID: #{{ server().id }}</code>
     </div>
     
-    <span class="status-badge" 
-          [class.status-online]="server().status === 'online'"
-          [class.status-offline]="server().status === 'offline'"
-          [class.status-maintenance]="server().status === 'maintenance'">
+    <span [appStatusBadge]="server().status">
       {{ statusLabel() }}
     </span>
   </div>
