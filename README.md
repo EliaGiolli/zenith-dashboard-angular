@@ -16,7 +16,9 @@
 - [🚀 Getting Started](#getting-started)
 - [📦 Available Scripts](#available-scripts)
 - [📂 Project Structure](#project-structure)
+- [🔧 Core Logic & Infrastructure](#-core-logic--infrastructure)
 - [🎨 Design System](#design-system)
+- [🧩 Custom Component Architecture](#-custom-component-architecture)
 - [🔒 Accessibility](#accessibility)
 - [📚 Additional Resources](#additional-resources)
 
@@ -232,6 +234,23 @@ zenith-dashboard/
 
 ---
 
+### 🔧 Core Logic & Infrastructure
+
+#### **Mock Persistence Interceptor**
+Unlike standard mock interceptors, our `MockInterceptor` implements a **Stateful Persistence Layer**. 
+- **In-Memory Database**: Data is stored in a persistent variable outside the interceptor function, preventing state reset during polling.
+- **SSR-Aware Latency**: Uses `isPlatformServer` to toggle latency. It provides a 0ms delay during Prerendering to prevent build timeouts and 800ms in the browser to test UI Skeletons.
+- **Type Safety**: Implements explicit body casting to handle TypeScript spread operations safely (fixing TS2698).
+
+#### **Reactive Polling Service**
+The `ServerService` uses a **Hybrid Reactive Pattern**:
+- **Automatic Polling**: Utilizes RxJS `timer` for background synchronization.
+- **Manual Triggers**: A `BehaviorSubject` acts as a "Refresh Signal". When a new server is added via `POST`, it manually triggers the polling stream, providing instant UI updates without waiting for the next timer cycle.
+
+#### **Advanced Directives**
+- **NativeModalDirective**: Bridges Angular's lifecycle with the browser's **HTML5 Dialog API**. It handles `.showModal()` in the `AfterViewInit` hook to ensure the backdrop and focus trapping are correctly initialized.
+- **StatusBadgeDirective**: A purely declarative approach to UI state. It uses `@HostBinding` and **Signals** to map server statuses to data-attributes and ARIA-labels, separating business logic from CSS styling.
+
 ## 🎨 Design System
 
 ### Color Tokens
@@ -283,6 +302,23 @@ zenith-dashboard/
 - **Navigation**: Sidebar with proper ARIA landmarks
 - **Status Badges**: Visual and textual status indicators with icons
 - **Theme Toggle**: Accessible theme switcher in sidebar
+
+---
+
+### 🧩 Custom Component Architecture
+
+Our components follow a **Slot-Based Projection Pattern** to ensure maximum reusability and clean separation of concerns.
+
+#### **The FormCard Pattern**
+Instead of rigid components, we developed `AppFormCard` using **Multiple Named Content Projection**:
+- `<ng-content select="[form-title]">`: Projects the header logic, allowing dynamic titles based on Signal states.
+- `<ng-content select="[form-body]">`: Hosts the reactive form inputs.
+- `<ng-content select="[form-actions]">`: Segregates buttons (Cancel/Save) to ensure consistent layout across different features (Servers vs. Contacts).
+
+#### **Signal-Driven Components**
+All shared components (Buttons, Cards, Inputs) leverage **Angular Signals**:
+- **Computed State**: Components like `Analytics` use `computed()` to derive counts and loading states directly from the global state signal.
+- **Interop**: We use `toSignal` to bridge our RxJS data streams into the template, eliminating the need for manual subscriptions, `ngOnInit`, or `OnDestroy`.
 
 ---
 

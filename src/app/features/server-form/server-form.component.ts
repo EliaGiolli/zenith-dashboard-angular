@@ -25,22 +25,18 @@ export class ServerFormComponent {
   private fb = inject(FormBuilder);
   private serverService = inject(ServerService);
 
-  // Stato della "Server Action"
   isPending = signal(false);
   success = signal(false);
   error = signal<string | null>(null);
 
-  // Definizione del Form
   form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
     ip: ['', [Validators.required, Validators.pattern(/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/)]],
     status: ['online', Validators.required]
   });
 
-  // Signal che osserva il valore del form in tempo reale
   formValue = toSignal(this.form.valueChanges);
 
-  // Logica derivata: mostriamo un'anteprima del server mentre l'utente scrive
   previewLabel = computed(() => {
     const val = this.formValue();
     return val?.name ? `Creazione: ${val.name} (${val.ip || '0.0.0.0'})` : 'In attesa di dati...';
@@ -59,20 +55,17 @@ export class ServerFormComponent {
 
   this.serverService.addServer(validation.data).subscribe({
     next: () => {
-      this.success.set(true); // Mostra il messaggio "✨ Nodo Creato!" nel template
+      this.success.set(true); 
       this.isPending.set(false);
       
-      // Chiudiamo dopo un breve delay per dare soddisfazione all'utente
       setTimeout(() => this.onClose(), 1500);
     },
     error: (err) => {
       this.isPending.set(false);
-      // Qui potresti impostare un signal error('Ops, riprova!')
     }
   });
 }
   onClose() {
-    // Se usi le rotte, torna alla dashboard
     this.router.navigate(['/analytics']);
   }
 }

@@ -21,6 +21,5 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './search-input.component.css'
 })
 export class SearchInputComponent {
-  // Questo definisce un Input() e un Output() allo stesso tempo
   value = model<string>(''); 
 }

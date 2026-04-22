@@ -4,7 +4,6 @@
   max-width: 600px;
 }
 
-/* container principale */
 .card-container {
   background: var(--surface);
   color: var(--accent);
@@ -17,19 +16,16 @@
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* header */
 .card-header {
   padding: 1.5rem;
   background: var(--surface-2);
   border-bottom: 1px solid var(--border);
 }
 
-/* body */
 .card-body {
   padding: 2rem;
 }
 
-/* footer */
 .card-footer {
   padding: 1rem 2rem;
   background: var(--surface-2);

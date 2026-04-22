@@ -1,14 +1,14 @@
 .search-box {
   position: relative;
   width: 100%;
-  max-width: 450px; /* Non vogliamo che occupi tutto lo schermo su desktop */
+  max-width: 450px; 
   margin-bottom: 2rem;
 }
 
 .search-input {
   width: 100%;
   padding: 0.8rem 1.2rem;
-  padding-right: 3rem; /* Spazio per il tasto X */
+  padding-right: 3rem; 
   
   background-color: var(--bg-card);
   color: var(--text-main);
@@ -21,7 +21,6 @@
   transition: all 0.2s ease;
 }
 
-/* Effetto focus coordinato con l'accento dell'app */
 .search-input:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
@@ -33,7 +32,6 @@
   opacity: 0.7;
 }
 
-/* Il tasto per pulire l'input */
 .clear-btn {
   position: absolute;
   right: 12px;

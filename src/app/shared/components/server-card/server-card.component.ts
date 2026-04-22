@@ -17,8 +17,6 @@ export class ServerCardComponent {
 
   statusLabel = computed(() => this.server().status.toUpperCase());
 
-  // Decidiamo la variante del bottone in base allo stato
-  // Se è offline, magari vogliamo un bottone 'danger' (aggiungiamolo al componente bottone)
   buttonVariant = computed(() => {
     return this.server().status === 'offline' ? 'danger' : 'primary';
   });

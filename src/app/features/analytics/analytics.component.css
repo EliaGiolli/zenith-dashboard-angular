@@ -35,7 +35,6 @@
   margin-bottom: 1rem;
 }
 
-/* Stile per i log delle chiamate API simulate */
 .api-log-panel {
   background: #000;
   border: 1px solid var(--border);
@@ -43,7 +42,7 @@
   padding: 1rem;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.8rem;
-  color: #10b981; /* Verde terminale */
+  color: #10b981; 
   max-height: 200px;
   overflow-y: auto;
 }
@@ -57,7 +56,6 @@
   border-radius: 1.25rem;
 }
 
-/* Responsive: se lo schermo è piccolo, metti i contenuti in colonna */
 @media (max-width: 600px) {
   .dashboard-header {
     flex-direction: column;

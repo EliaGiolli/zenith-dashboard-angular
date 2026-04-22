@@ -14,13 +14,11 @@
   overflow: hidden;
 }
 
-/* backdrop coerente dark/light */
 .zenith-modal::backdrop {
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
 }
 
-/* animazione apertura */
 .zenith-modal[open] {
   animation: modalIn 0.25s ease-out;
 }
@@ -36,7 +34,6 @@
   }
 }
 
-/* FORM inside modal */
 .standard-form {
   padding: 1rem 0;
   display: flex;

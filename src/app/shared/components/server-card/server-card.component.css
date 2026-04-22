@@ -8,7 +8,6 @@
   transition: all 0.25s ease;
 }
 
-/* hover più “UI system”, meno casual */
 .card:hover {
   border-color: var(--accent);
   transform: translateY(-3px);
@@ -24,7 +23,6 @@
   color: var(--text-muted);
 }
 
-/* header layout */
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -32,7 +30,6 @@
   margin-bottom: 1.5rem;
 }
 
-/* status badge base */
 .status-badge {
   font-size: 0.65rem;
   font-weight: 800;
@@ -42,7 +39,6 @@
   text-transform: uppercase;
 }
 
-/* status variants */
 .status-online {
   color: var(--status-online);
   background: color-mix(in srgb, var(--status-online) 12%, transparent);
@@ -61,7 +57,6 @@
   border: 1px solid color-mix(in srgb, var(--status-maintenance) 25%, transparent);
 }
 
-/* CPU meter */
 .meter-container {
   margin-bottom: 1.5rem;
 }

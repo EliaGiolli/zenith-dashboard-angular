@@ -1,34 +1,52 @@
-import { Directive, HostBinding, input, OnChanges } from '@angular/core';
+import { Directive, HostBinding, input } from '@angular/core';
 
 @Directive({
-  selector: '[appStatusBadge]', // Si usa come attributo: <span appStatusBadge="online">
+  selector: '[appStatusBadge]', // Applied as an attribute: <span appStatusBadge="online">
   standalone: true
 })
 export class StatusBadgeDirective {
-  // Signal input
+  /**
+   * SIGNAL INPUT
+   * Uses the modern Signal-based input API.
+   * Alias 'appStatusBadge' allows direct binding to the directive selector.
+   */
   status = input<string>('offline', { alias: 'appStatusBadge' });
 
+  /**
+   * DATA ATTRIBUTE BINDING
+   * Binds the signal value to a 'data-status' attribute for CSS styling.
+   * Example: [data-status="online"] { background: green; }
+   */
   @HostBinding('attr.data-status') get statusAttr() {
-    return this.status(); // Chiamiamo il signal
+    return this.status(); 
   }
 
+  // Applies a static base class for general badge styling
   @HostBinding('class.status-pill') readonly baseClass = true;
 
-  // 3. ACCESSIBILITÀ: Ruolo semantico
+  /**
+   * ACCESSIBILITY (A11y): Semantic Role
+   * Informs assistive technologies that this element represents a status indicator.
+   */
   @HostBinding('attr.role') readonly role = 'status';
 
-  // 4. ACCESSIBILITÀ: Notifica dinamica dei cambiamenti
-  // 'polite' significa che lo screen reader aspetta che l'utente finisca di leggere prima di annunciare il cambio
+  /**
+   * ACCESSIBILITY (A11y): Dynamic Announcements
+   * 'polite' ensures screen readers announce status changes without 
+   * interrupting the user's current task.
+   */
   @HostBinding('attr.aria-live') readonly ariaLive = 'polite';
 
-  // 5. ACCESSIBILITÀ: Traduzione dello stato in linguaggio naturale
+  /**
+   * ACCESSIBILITY (A11y): Natural Language Translation
+   * Maps technical status keys to descriptive labels for screen readers.
+   */
   @HostBinding('attr.aria-label') get ariaLabel() {
     const translations: Record<string, string> = {
-      'online': 'Stato del server: Operativo e attivo',
-      'offline': 'Stato del server: Non raggiungibile o spento',
-      'maintenance': 'Stato del server: In manutenzione programmata'
+      'online': 'Server status: Operational and active',
+      'offline': 'Server status: Unreachable or powered off',
+      'maintenance': 'Server status: Under scheduled maintenance'
     };
-    return translations[this.status()] || 'Stato del server: Sconosciuto';
+    return translations[this.status()] || 'Server status: Unknown';
   }
 }
-// Gli stili applicati da questa direttiva si trovano nel file style.css

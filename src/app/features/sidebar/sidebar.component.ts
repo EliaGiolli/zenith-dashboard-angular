@@ -10,14 +10,10 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
-  // Inietto l'intero servizio
   private settings = inject(SettingServiceService);
-
-  // Creo un riferimento locale per comodità (opzionale)
   darkMode = this.settings.isDarkMode;
 
   onToggle() {
-    // Chiamo il metodo del servizio
     this.settings.toggleDarkMode();
   }
 }

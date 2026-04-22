@@ -15,7 +15,7 @@ export class DashboardComponent {
   inspectionCount = signal<number>(0);
   searchQuery = signal('');
   constructor() {
-    // Si attiva automaticamente al primo avvio e ogni volta che inspectionCount cambia
+    // effect() automatically activates after the first render and after each time inspectionCount changes
     effect(() => {
       const count = this.inspectionCount();
       console.log(`Effect: Il contatore è cambiato a ${count}`);
@@ -32,7 +32,6 @@ export class DashboardComponent {
     { id: 3, name: 'API Server', status: 'offline', cpuUsage: 0, memoryUsage: 0, lastUpdate: new Date() }
   ]);
 
-  // Definiamo lo Stato Derivato
   statusMessage = computed(() => {
     const count = this.inspectionCount();
     if (count === 0) return 'Nessuna attività';
@@ -40,7 +39,6 @@ export class DashboardComponent {
     return 'Analisi intensiva';
   });
 
-  // Computed filtra i server in tempo reale
   filteredServers = computed(() => {
     const term = this.searchQuery().toLowerCase().trim();
     if (!term) return this.servers();
@@ -52,7 +50,6 @@ export class DashboardComponent {
 
   handleServerSelection(id: number) {
     this.selectedServerId.set(id);
-    // Aggiorniamo il contatore
     this.inspectionCount.update(prev => prev + 1);
   }
 }

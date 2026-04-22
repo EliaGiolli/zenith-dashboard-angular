@@ -7,5 +7,4 @@ export const ServerSchema = z.object({
   status: z.enum(['online', 'offline', 'maintenance'])
 });
 
-// Genera automaticamente il tipo TS dallo schema
 export type Server = z.infer<typeof ServerSchema>;
