@@ -173,6 +173,24 @@ body {
 }
 
 /* =========================
+   DIALOG/MODAL STYLING
+========================= */
+
+dialog {
+  background-color: var(--surface);
+  color: var(--text-main);
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  overflow-y: hidden;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+/* =========================
    OPTIONAL UX IMPROVEMENTS
 ========================= */
 
@@ -189,4 +207,10 @@ textarea,
 select {
   all: unset;
   box-sizing: border-box;
+}
+
+/* Improve input contrast in dark theme */
+.dark-theme .form-field input,
+.dark-theme .form-field textarea {
+  border-color: #3f3f46;
 }

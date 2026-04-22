@@ -5,7 +5,7 @@ import { Component, HostBinding, input } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './app-form-card.component.html',
-  styleUrl: './app-form-card.component.css'
+  styleUrls: ['./app-form-card.component.css']
 })
 export class AppFormCardComponent {
   variant = input<'default' | 'contact'>('default');

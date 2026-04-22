@@ -17,7 +17,8 @@ import { NativeModalDirective } from '../../core/directives/modal-a11y.directive
     AppButtonComponent,
     NativeModalDirective
   ], 
-  templateUrl: './server-form.component.html'
+  templateUrl: './server-form.component.html',
+  styleUrls: ['./server-form.component.css']
 })
 export class ServerFormComponent {
   private router = inject(Router);
