@@ -1,31 +1,61 @@
-// server.service.ts
-import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, signal, computed } from '@angular/core';
+import { of, delay, tap } from 'rxjs';
 import { Server } from '../models/server.model';
-import { catchError, delay, map, Observable, of, shareReplay, startWith, switchMap, tap, timer } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ServerService {
-  
-  private http = inject(HttpClient);
-  private readonly API_URL = 'api/servers';
+  /**
+   * INTERNAL STATE
+   * We use a private signal to hold the source of truth.
+   * This mimics a local database.
+   */
+  private serversSignal = signal<Server[]>([
+    { id: 1, name: 'Prod-Web-01', status: 'online', cpuUsage: 42, memoryUsage: 55, lastUpdate: new Date() },
+    { id: 2, name: 'Auth-Service', status: 'maintenance', cpuUsage: 12, memoryUsage: 80, lastUpdate: new Date() },
+    { id: 3, name: 'Backup-Node', status: 'offline', cpuUsage: 0, memoryUsage: 0, lastUpdate: new Date() }
+  ]);
 
+  /**
+   * PUBLIC STATE (Read-Only)
+   * Components will consume this state. We wrap it in a standard 
+   * object structure to keep consistency with the previous API logic.
+   */
+  readonly state = computed(() => ({
+    loading: false,
+    data: this.serversSignal(),
+    error: null
+  }));
+
+  /**
+   * FETCH METHOD
+   * Returns an Observable of the current state.
+   * Useful for toSignal() in components to maintain the same architecture.
+   */
   getServers() {
-    return this.http.get<Server[]>(this.API_URL);
+    return of(this.state());
   }
 
-  getPollingServersState() {
-    return timer(0, 15000).pipe(
-      switchMap(() => this.http.get<Server[]>('api/servers')),
-      map(data => ({ loading: false, data, error: null })),
-      catchError(error => of({ loading: false, data: [], error })),
-      shareReplay(1) 
-    );
-  }
-  // src/app/core/services/server.service.ts
-  addServer(server: any): Observable<any> {
-    return this.http.post<any>('api/servers', server).pipe(
-      tap(() => console.log('Server inviato con successo al mock'))
+  /**
+   * ADD METHOD
+   * Simulates a POST request. It updates the local signal, 
+   * which automatically triggers updates in all listening components.
+   */
+  addServer(server: Partial<Server>) {
+    const newServer = {
+      ...server,
+      id: this.serversSignal().length + 1,
+      cpuUsage: 0,
+      memoryUsage: 0,
+      lastUpdate: new Date()
+    } as Server;
+
+    // Simulate a brief network delay (e.g., 500ms) for UI testing (spinner/pending)
+    // but we update the signal inside a tap()
+    return of(newServer).pipe(
+      delay(500),
+      tap(created => {
+        this.serversSignal.update(list => [...list, created]);
+      })
     );
   }
 }
