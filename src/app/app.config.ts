@@ -4,7 +4,6 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
-import { mockInterceptor } from './core/interceptors/mock.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -13,7 +12,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), 
     provideClientHydration(withEventReplay()),
     provideHttpClient(withInterceptors([
-      mockInterceptor,
       errorInterceptor
     ]))
   ]
