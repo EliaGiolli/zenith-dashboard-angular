@@ -1,6 +1,6 @@
 # 🌟 Zenith Dashboard
 
-> A modern, feature-rich server management dashboard built with Angular 19, featuring real-time monitoring, dark theme support, and accessible UI components.
+> A modern, feature-rich server management dashboard built with Angular 19, featuring monitoring with polling, dark theme support, and accessible UI components.
 
 [![Angular](https://img.shields.io/badge/Angular-19.2.24-red?logo=angular&logoColor=white)](https://angular.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7.2-blue?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
